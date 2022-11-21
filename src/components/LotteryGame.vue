@@ -1,6 +1,5 @@
 <template>
     <div class="LotteryGame">
-        <!-- <audio src="../assets/img/common/lucky.mp3" preload id="bg-music"></audio> -->
 
         <div class="contianer">
 
@@ -13,15 +12,7 @@
             </div>
 
             <div class="tip">
-                每次抽取5個數字，總共5次，優先連成三條線將完成
-            </div>
-
-            <div class="btm">
-                <img src="../assets/img/common/btm.png">
-            </div>
-
-            <div class="start">
-                <a class="startBtn" @click="startBtn"></a>
+                每次抽取5個數字，總共6次，優先連成三條線將完成
             </div>
 
             <div class="circle-bg" :class="{fadeInUp:isfadeInUp}">
@@ -32,7 +23,7 @@
                     <img src="../assets/img/page1/circle2.png">
                 </div>
                 <div class="circle3">
-                    <span class="BingoText">Bingo</span>
+                    <span class="BingoText" @click="startBtn">Bingo</span>
                 </div>
             </div>
 
@@ -41,7 +32,7 @@
                     <img src="../assets/img/page4/group1.png">
                 </div>
                 <div class="group1Txt">
-					<li v-for="n in lotteryNumners[0]" :key="n">{{ n }}</li>
+					<span v-for="n in lotteryNumners[0]" :key="n">{{ n }}<br></span>
                 </div>
             </div>
 
@@ -50,7 +41,7 @@
                     <img src="../assets/img/page3/group2.png">
                 </div>
                 <div class="group2Txt">
-                    <li v-for="n in lotteryNumners[1]" :key="n">{{ n }}</li>
+                    <span v-for="n in lotteryNumners[1]" :key="n">{{ n }}<br></span>
                 </div>
             </div>
 
@@ -59,7 +50,7 @@
                     <img src="../assets/img/page3/group3.png">
                 </div>
                 <div class="group3Txt">
-                    <li v-for="n in lotteryNumners[2]" :key="n">{{ n }}</li>
+                    <span v-for="n in lotteryNumners[2]" :key="n">{{ n }}<br></span>
                 </div>
             </div>
 
@@ -68,7 +59,7 @@
                     <img src="../assets/img/page4/group4.png">
                 </div>
                 <div class="group4Txt">
-                    <li v-for="n in lotteryNumners[3]" :key="n">{{ n }}</li>
+                    <span v-for="n in lotteryNumners[3]" :key="n">{{ n }}<br></span>
                 </div>
             </div>
 
@@ -77,10 +68,18 @@
                     <img src="../assets/img/page4/group5.png">
                 </div>
                 <div class="group5Txt">
-                    <li v-for="n in lotteryNumners[4]" :key="n">{{ n }}</li>
+                    <span v-for="n in lotteryNumners[4]" :key="n">{{ n }}<br></span>
                 </div>
             </div>
 
+			<div class="group6" :class="{groupshow5:isgroupshow6}">
+                <div class="group6Bg">
+                    <img src="../assets/img/page4/group5.png">
+                </div>
+                <div class="group6Txt">
+                    <span v-for="n in lotteryNumners[5]" :key="n">{{ n }}<br></span>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -100,16 +99,21 @@ export default {
 			isgroupshow3: false,
             isgroupshow4: false,
             isgroupshow5: false,
+			isgroupshow6: false,
             min: 0,
             max: 99,
             amount: 5,
 			lotteryNumners: [],
             lotteryNumner: [],
-            result : ''
+            result : '',
+			music: require('../assets/img/common/lucky.mp3'),
         }
     },
     methods: {
         startBtn(){
+			const sound = new Audio(this.music)
+			sound.play()
+
             var randNum
             this.warn = '';
             this.amount = parseInt(this.amount);
@@ -157,6 +161,9 @@ export default {
 				case 4:
 					this.isgroupshow5 = true
 					break
+				case 5:
+					this.isgroupshow6 = true
+					break
 				default:
 					alert('已抽獎完畢！')
 			}
@@ -166,6 +173,10 @@ export default {
                 this.isrotateIn1 = false
                 this.isrotateIn2 = false
             },9000)
+
+			window.setTimeout(()=>{
+                sound.pause()
+            },15000)
         }
     }
 
@@ -485,7 +496,7 @@ img{
 	height: 0;
 	position: absolute;
 	top: 60%;
-	left: 50%;
+	left: 45%;
 	margin-left: -90px;
 	overflow:hidden;
 }
@@ -498,6 +509,41 @@ img{
 }
 
 .group5Txt{
+	width: 170px;
+	height: 145px;
+	position: absolute;
+	top: 115px;
+	left: 1px;
+	color: #ffcd00;
+	text-align: center;
+	line-height: 28px;
+	font-size: 20px;
+	letter-spacing: 2px;
+}
+
+.groupshow6{
+	overflow:hidden;
+	animation: groupshow5 3s linear 9s 1 normal both;
+}
+
+.group6{
+	width: 200px;
+	height: 0;
+	position: absolute;
+	top: 60%;
+	left: 60%;
+	margin-left: -90px;
+	overflow:hidden;
+}
+.group6Bg{
+	width: 100%;
+	height: auto;
+}
+.group6Bg img{
+	width: 100%;
+}
+
+.group6Txt{
 	width: 170px;
 	height: 145px;
 	position: absolute;
