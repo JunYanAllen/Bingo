@@ -98,10 +98,6 @@
 export default {
     name: 'LotteryGame',
 	created() {
-    //   const component = this;
-    //   this.handler = function (e) {
-    //     component.$emit('keyup', e);
-    //   }
       window.addEventListener('keydown', this.startBtn);
     },
     data() {
@@ -149,7 +145,8 @@ export default {
 				for(var i=0; i<this.amount; i++){
 					randNum = Math.round(this.min + Math.random() * (this.max- this.min));
 					
-					for(var j=0; j<this.totalNumner.length; j){
+					for(var j=0; j<=this.totalNumner.length; j){
+						console.log(this.totalNumner.length);
 						while(randNum == this.totalNumner[j]) {
 							randNum = Math.round(this.min + Math.random() * (this.max- this.min));
 						}
@@ -159,7 +156,6 @@ export default {
 					this.lotteryNumner[i] = randNum;
 					this.totalNumner.push(randNum)
 				}
-				// this.totalNumner = this.totalNumner.concat(this.lotteryNumner)
 				this.lotteryNumners[this.count] = this.lotteryNumner
 
 				}
@@ -200,10 +196,10 @@ export default {
 					window.setTimeout(()=>{
 					this.isrotateIn1 = false
 					this.isrotateIn2 = false
-					},9000)
+					},6000)
 					window.setTimeout(()=>{
 					sound.pause()
-					},15000)
+					},9000)
 				}
 				this.count += 1
 
@@ -417,11 +413,11 @@ img{
 	}
 }
 .rotateIn1{
-	animation: rotateIn 3s linear 0s 3 normal both;
+	animation: rotateIn 3s linear 0s 2 normal both;
 	/*animation: rotateIn 2s linear 0s infinite normal both;*/
 }
 .rotateIn2{
-	animation: rotateIn 1.3s linear 0s 6 normal both;
+	animation: rotateIn 1.3s linear 0s 4 normal both;
 }
 
 /**/
@@ -517,7 +513,7 @@ img{
 }
 .groupshow{
 	overflow:hidden;
-	animation: groupshow 3s linear 9s 1 normal both;
+	animation: groupshow 3s linear 6s 1 normal both;
 }
 
 @keyframes groupshow5{
@@ -535,7 +531,7 @@ img{
 }
 .groupshow5{
 	overflow:hidden;
-	animation: groupshow5 3s linear 9s 1 normal both;
+	animation: groupshow5 3s linear 6s 1 normal both;
 }
 
 .group5{
@@ -570,7 +566,7 @@ img{
 
 .groupshow6{
 	overflow:hidden;
-	animation: groupshow5 3s linear 9s 1 normal both;
+	animation: groupshow5 3s linear 6s 1 normal both;
 }
 
 .group6{
