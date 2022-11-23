@@ -11,7 +11,7 @@
             </div>
 
             <div class="tip">
-                每次抽取5個數字，總共6次，優先連成三條線將完成
+                將抽六次，總計35個數字，只要連成三條線，先在螢幕上打字並完成視訊完成驗證
             </div>
 
             <div class="circle-bg" :class="{fadeInUp:isfadeInUp}">
@@ -489,7 +489,12 @@ img{
 }
 .group1Txt{
 	top: 9px;
-	left: 25px;
+	left: 70px;
+	display: flex;
+	flex-wrap: wrap;
+}
+.group1Txt ul{
+	padding-right: 20px;
 }
 .group2Txt{
 	top: 9px;
