@@ -30,8 +30,10 @@
                 <div class="group1Bg">
                     <img src="../assets/img/page4/group1.png">
                 </div>
-                <div class="group1Txt">
-					<span v-for="n in lotteryNumners[0]" :key="n">{{ n }}<br></span>
+                <div class="group1Txt"> 
+					<ul v-for="numbers in firstNumber" :key="numbers">
+						<li v-for="n in numbers" :key="n">{{ n }}</li>
+					</ul>
                 </div>
             </div>
 
@@ -83,7 +85,7 @@
 			<div class="groupAll groupAllshow" v-show="groupAll">
 					<div class="groupAllTxt" v-for="numbers in lotteryNumners" :key="numbers">
 						<ul >
-							<li v-for="n in numbers" :key="n">{{  n }}</li>
+							<li v-for="n in numbers" :key="n">{{ n }}</li>
 						</ul>
 					</div>
 				
@@ -116,6 +118,7 @@ export default {
             max: 75,
             amount: 5,
 			lotteryNumners: [],
+			firstNumber: [],
             lotteryNumner: [],
 			totalNumner: [],
             result : '',
@@ -129,7 +132,7 @@ export default {
 				let sound = new Audio(this.music)
 				sound.play()
 
-				var randNum
+				let randNum = 0
 				this.warn = '';
 				this.amount = parseInt(this.amount);
 				this.max = parseInt(this.max);
@@ -141,28 +144,44 @@ export default {
 				this.isrotateIn2 = true
 				}
 				if(this.count < 6){
-
-				for(var i=0; i<this.amount; i++){
-					randNum = Math.round(this.min + Math.random() * (this.max- this.min));
-					
-					for(var j=0; j<=this.totalNumner.length; j){
-						console.log(this.totalNumner.length);
-						while(randNum == this.totalNumner[j]) {
-							randNum = Math.round(this.min + Math.random() * (this.max- this.min));
-						}
+					if(this.count == 0){
+						for(var i=0; i<10; i++){
+						randNum = Math.round(this.min + Math.random() * (this.max- this.min));
 						
-						j++;
+						for(var j=0; j<=this.totalNumner.length; j){
+							while(this.totalNumner.includes(randNum)) {
+								randNum = Math.round(this.min + Math.random() * (this.max- this.min));
+							}
+							
+							j++;
+						}
+						this.lotteryNumner[i] = randNum;
+						this.totalNumner.push(randNum)
+						}
+						this.lotteryNumners[this.count] = this.lotteryNumner
+					}else{
+						for(var k=0; k<this.amount; k++){
+							randNum = Math.round(this.min + Math.random() * (this.max- this.min));
+							
+							for(var l=0; l<=this.totalNumner.length; l){
+								while(this.totalNumner.includes(randNum)) {
+									randNum = Math.round(this.min + Math.random() * (this.max- this.min));
+								}
+								
+								l++;
+							}
+							this.lotteryNumner[k] = randNum;
+							this.totalNumner.push(randNum)
+						}
+						this.lotteryNumners[this.count] = this.lotteryNumner
 					}
-					this.lotteryNumner[i] = randNum;
-					this.totalNumner.push(randNum)
-				}
-				this.lotteryNumners[this.count] = this.lotteryNumner
-
 				}
 				switch(this.count){
 					case 0:
 						this.isfadeInUp = true
 						this.isgroupshow = true
+						this.firstNumber = getNewArray(this.lotteryNumners[0],5)
+						console.log(this.firstNumber)
 						break
 					case 1:
 						this.isgroupshow2 = true
@@ -187,9 +206,6 @@ export default {
 						this.isgroupshow5 = false
 						this.isgroupshow6 = false
 						this.groupAll = true
-						console.log(this.totalNumner)
-						
-						// console.log(getNewArray(this.totalNumner.sort(compareNumbers),5))
 						this.lotteryNumners = getNewArray(this.totalNumner.sort(compareNumbers),5)
 				}
 				if(this.count < 6){
@@ -224,6 +240,7 @@ function getNewArray(arr, size){
 function compareNumbers(a, b) {
   return a - b;
 }
+
 </script>
 
 <style scoped>
@@ -650,7 +667,7 @@ img{
 	70%  {height: 35%;}
 	80%  {height: 40%;}
 	90%  {height: 45%;}
-	100%  {height: 50%;}
+	100%  {height: 65%;}
 }
 .groupAllshow{
 	overflow:hidden;
