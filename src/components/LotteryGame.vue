@@ -23,7 +23,7 @@
                     <img src="../assets/img/page1/circle2.png">
                 </div>
                 <div class="circle3">
-                    <span class="BingoText" @click="startBtn">Bingo</span>
+                    <span class="BingoText" @click="startBtn" >Bingo</span>
                 </div>
             </div>
 
@@ -80,7 +80,17 @@
                     <span v-for="n in lotteryNumners[5]" :key="n">{{ n }}<br></span>
                 </div>
             </div>
+
+			<div class="groupAll groupAllshow" v-show="groupAll">
+					<div class="groupAllTxt" v-for="numbers in lotteryNumners" :key="numbers">
+						<ul >
+							<li v-for="n in numbers" :key="n">{{  n }}</li>
+						</ul>
+					</div>
+				
+			</div>
         </div>
+		
     </div>
     
 </template>
@@ -101,16 +111,18 @@ export default {
             isgroupshow5: false,
 			isgroupshow6: false,
             min: 0,
-            max: 99,
+            max: 75,
             amount: 5,
 			lotteryNumners: [],
             lotteryNumner: [],
             result : '',
 			music: require('../assets/img/common/lucky.mp3'),
+			groupAll: false
         }
     },
     methods: {
         startBtn(){
+			
 			const sound = new Audio(this.music)
 			sound.play()
 
@@ -121,9 +133,11 @@ export default {
             this.min = parseInt(this.min);
             this.lotteryNumner = [];
             this.result = '';
+			if(this.count < 6){
             this.isrotateIn1 = true
             this.isrotateIn2 = true
-			
+			}
+			if(this.count < 6){
             for(var i=0; i<this.amount; i++){
                 randNum = Math.round(this.min + Math.random() * (this.max- this.min));
                 
@@ -142,8 +156,7 @@ export default {
                 this.lotteryNumner[i] = randNum;
             }
 			this.lotteryNumners[this.count] = this.lotteryNumner
-			// console.log(this.lotteryNumners[0][0])
-
+			}
 			switch(this.count){
 				case 0:
 					this.isfadeInUp = true
@@ -165,18 +178,26 @@ export default {
 					this.isgroupshow6 = true
 					break
 				default:
-					alert('已抽獎完畢！')
+					this.isgroupshow = false 
+					this.isgroupshow2 = false 
+					this.isgroupshow3 = false 
+					this.isgroupshow4 = false 
+					this.isgroupshow5 = false
+					this.isgroupshow6 = false
+					this.groupAll = true
 			}
-			this.count += 1
-
-            window.setTimeout(()=>{
+			console.log(this.count)
+			if(this.count < 6){
+				console.log('in')
+				window.setTimeout(()=>{
                 this.isrotateIn1 = false
                 this.isrotateIn2 = false
-            },9000)
-
-			window.setTimeout(()=>{
-                sound.pause()
-            },15000)
+				},9000)
+				window.setTimeout(()=>{
+				sound.pause()
+				},15000)
+			}
+			this.count += 1
         }
     }
 
@@ -564,5 +585,52 @@ img{
 	color: #FFCE30;
 	text-shadow: black 0.1em 0.1em 0.2em;
 	font-weight:bold;
+}
+
+.groupAll{
+	position: absolute;
+	width: 500px;
+	height: 500px;
+	background-color: rgb(91, 0, 3);
+	border-width:10px;
+	border-style:solid;
+	border-color: rgb(116,9,13);
+	top: 55%;  
+	left: 50%;
+	transform: translate(-50%, -50%);
+	display: flex;
+	flex-wrap: wrap;
+}
+.groupAllTxt{
+	width: 150px;
+	height: 160px;
+	top: 115px;
+	left: 1px;
+	color: #ffcd00;
+	text-align: center;
+	line-height: 28px;
+	font-size: 20px;
+	letter-spacing: 2px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+@keyframes groupAllshow{
+	0%   {height: 0;}
+	10%  {height: 5%;}
+	20%  {height: 10%;}
+	30%  {height: 15%;}
+	40%  {height: 20%;}
+	50%  {height: 25%;}
+	60%  {height: 30%;}
+	70%  {height: 35%;}
+	80%  {height: 40%;}
+	90%  {height: 45%;}
+	100%  {height: 50%;}
+}
+.groupAllshow{
+	overflow:hidden;
+	animation: groupAllshow 3s linear 0s 1 normal both;
 }
 </style>
