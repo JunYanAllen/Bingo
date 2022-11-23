@@ -130,8 +130,9 @@ export default {
         startBtn(e){
 			if(e.key == "Enter"){
 				let sound = new Audio(this.music)
-				sound.play()
-
+				if(this.count < 6){
+					sound.play()
+				}
 				let randNum = 0
 				this.warn = '';
 				this.amount = parseInt(this.amount);
@@ -213,10 +214,10 @@ export default {
 					this.isrotateIn1 = false
 					this.isrotateIn2 = false
 					},6000)
-					window.setTimeout(()=>{
-					sound.pause()
-					},9000)
 				}
+				window.setTimeout(()=>{
+				sound.pause()
+				},7000)
 				this.count += 1
 
 				
