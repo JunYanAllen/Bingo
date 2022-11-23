@@ -1,6 +1,5 @@
 <template>
     <div class="LotteryGame">
-
         <div class="contianer">
 
             <div class="center">
@@ -23,7 +22,7 @@
                     <img src="../assets/img/page1/circle2.png">
                 </div>
                 <div class="circle3">
-                    <span class="BingoText" @click="startBtn" >Bingo</span>
+                    <span class="BingoText" @click="startBtn">Bingo</span>
                 </div>
             </div>
 
@@ -98,6 +97,13 @@
 <script>
 export default {
     name: 'LotteryGame',
+	created() {
+    //   const component = this;
+    //   this.handler = function (e) {
+    //     component.$emit('keyup', e);
+    //   }
+      window.addEventListener('keydown', this.startBtn);
+    },
     data() {
         return {
             count: 0,
@@ -110,97 +116,117 @@ export default {
             isgroupshow4: false,
             isgroupshow5: false,
 			isgroupshow6: false,
-            min: 0,
+            min: 1,
             max: 75,
             amount: 5,
 			lotteryNumners: [],
             lotteryNumner: [],
+			totalNumner: [],
             result : '',
 			music: require('../assets/img/common/lucky.mp3'),
 			groupAll: false
         }
     },
     methods: {
-        startBtn(){
-			
-			const sound = new Audio(this.music)
-			sound.play()
+        startBtn(e){
+			if(e.key == "Enter"){
+				let sound = new Audio(this.music)
+				sound.play()
 
-            var randNum
-            this.warn = '';
-            this.amount = parseInt(this.amount);
-            this.max = parseInt(this.max);
-            this.min = parseInt(this.min);
-            this.lotteryNumner = [];
-            this.result = '';
-			if(this.count < 6){
-            this.isrotateIn1 = true
-            this.isrotateIn2 = true
-			}
-			if(this.count < 6){
-            for(var i=0; i<this.amount; i++){
-                randNum = Math.round(this.min + Math.random() * (this.max- this.min));
-                
-                for(var j=0; j<this.amount; j){
-					for(var k=0; k<this.amount; k){
-						if(this.lotteryNumners.length > 0 ){
-							if(this.lotteryNumners[j] != undefined && randNum == this.lotteryNumners[j][k]){
-								randNum = Math.round(this.min + Math.random() * (this.max- this.min));
-							}
-							
+				var randNum
+				this.warn = '';
+				this.amount = parseInt(this.amount);
+				this.max = parseInt(this.max);
+				this.min = parseInt(this.min);
+				this.lotteryNumner = [];
+				this.result = '';
+				if(this.count < 6){
+				this.isrotateIn1 = true
+				this.isrotateIn2 = true
+				}
+				if(this.count < 6){
+
+				for(var i=0; i<this.amount; i++){
+					randNum = Math.round(this.min + Math.random() * (this.max- this.min));
+					
+					for(var j=0; j<this.totalNumner.length; j){
+						while(randNum == this.totalNumner[j]) {
+							randNum = Math.round(this.min + Math.random() * (this.max- this.min));
 						}
-						k++;
+						
+						j++;
 					}
-                    j++;
-                }
-                this.lotteryNumner[i] = randNum;
-            }
-			this.lotteryNumners[this.count] = this.lotteryNumner
+					this.lotteryNumner[i] = randNum;
+					this.totalNumner.push(randNum)
+				}
+				// this.totalNumner = this.totalNumner.concat(this.lotteryNumner)
+				this.lotteryNumners[this.count] = this.lotteryNumner
+
+				}
+				switch(this.count){
+					case 0:
+						this.isfadeInUp = true
+						this.isgroupshow = true
+						break
+					case 1:
+						this.isgroupshow2 = true
+						break
+					case 2:
+						this.isgroupshow3 = true
+						break
+					case 3:
+						this.isgroupshow4 = true
+						break
+					case 4:
+						this.isgroupshow5 = true
+						break
+					case 5:
+						this.isgroupshow6 = true
+						break
+					default:
+						this.isgroupshow = false 
+						this.isgroupshow2 = false 
+						this.isgroupshow3 = false 
+						this.isgroupshow4 = false 
+						this.isgroupshow5 = false
+						this.isgroupshow6 = false
+						this.groupAll = true
+						console.log(this.totalNumner)
+						
+						// console.log(getNewArray(this.totalNumner.sort(compareNumbers),5))
+						this.lotteryNumners = getNewArray(this.totalNumner.sort(compareNumbers),5)
+				}
+				if(this.count < 6){
+					window.setTimeout(()=>{
+					this.isrotateIn1 = false
+					this.isrotateIn2 = false
+					},9000)
+					window.setTimeout(()=>{
+					sound.pause()
+					},15000)
+				}
+				this.count += 1
+
+				
 			}
-			switch(this.count){
-				case 0:
-					this.isfadeInUp = true
-					this.isgroupshow = true
-					break
-				case 1:
-					this.isgroupshow2 = true
-					break
-				case 2:
-					this.isgroupshow3 = true
-					break
-				case 3:
-					this.isgroupshow4 = true
-					break
-				case 4:
-					this.isgroupshow5 = true
-					break
-				case 5:
-					this.isgroupshow6 = true
-					break
-				default:
-					this.isgroupshow = false 
-					this.isgroupshow2 = false 
-					this.isgroupshow3 = false 
-					this.isgroupshow4 = false 
-					this.isgroupshow5 = false
-					this.isgroupshow6 = false
-					this.groupAll = true
-			}
-			console.log(this.count)
-			if(this.count < 6){
-				console.log('in')
-				window.setTimeout(()=>{
-                this.isrotateIn1 = false
-                this.isrotateIn2 = false
-				},9000)
-				window.setTimeout(()=>{
-				sound.pause()
-				},15000)
-			}
-			this.count += 1
         }
     }
 
+}
+function getNewArray(arr, size){
+	const arrNum = Math.ceil(arr.length/size, 10); // Math.ceil()向上取整的方法，用来计算拆分后数组的长度
+	let index = 0; // 定义初始索引
+	let resIndex = 0; // 用来保存每次拆分的长度
+	const result = [];
+	while(index< arrNum){
+		result[index]= arr.slice(resIndex,size+resIndex);
+		resIndex += size;
+		index++;
+	}
+	return result;
+}
+function compareNumbers(a, b) {
+  return a - b;
 }
 </script>
 
@@ -585,6 +611,7 @@ img{
 	color: #FFCE30;
 	text-shadow: black 0.1em 0.1em 0.2em;
 	font-weight:bold;
+	
 }
 
 .groupAll{
