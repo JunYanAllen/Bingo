@@ -1,16 +1,18 @@
 <template>
-  <LotteryGame></LotteryGame>
+  <!-- <LotteryGame></LotteryGame> -->
+  <NewBingoGame></NewBingoGame>
 </template>
 
 <script>
 // import HelloWorld from './components/HelloWorld.vue'
-import LotteryGame from './components/LotteryGame.vue'
-
+// import LotteryGame from './components/LotteryGame.vue'
+import NewBingoGame from './components/NewBingoGame.vue';
 export default {
   name: 'App',
   components: {
     // HelloWorld,
-    LotteryGame
+    // LotteryGame
+    NewBingoGame
   }
 }
 </script>

@@ -83,12 +83,11 @@
             </div>
 
 			<div class="groupAll groupAllshow" v-show="groupAll">
-					<div class="groupAllTxt" v-for="numbers in lotteryNumners" :key="numbers">
-						<ul >
-							<li v-for="n in numbers" :key="n">{{ n }}</li>
-						</ul>
-					</div>
-				
+				<div class="groupAllTxt" v-for="numbers in lotteryNumners" :key="numbers">
+					<ul >
+						<li v-for="n in numbers" :key="n">{{ n }}</li>
+					</ul>
+				</div>
 			</div>
         </div>
 		
