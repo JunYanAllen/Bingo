@@ -74,10 +74,10 @@ export default {
     methods: {
         startBtn(e){
 			if(e.key == "Enter"){
-				// let sound = new Audio(this.music)
-				// if(this.count < 6){
-				// 	sound.play()
-				// }
+				let sound = new Audio(this.music)
+				if(this.totalNumner.length  == 0){
+					sound.play()
+				}
 				let randNum = 0
 				this.max = parseInt(this.max);
 				this.min = parseInt(this.min);
@@ -139,8 +139,8 @@ export default {
                     },6000)
                 }
 
-				// window.setTimeout(()=>{sound.pause()},7000)
-
+				window.setTimeout(()=>{sound.pause()},7000)
+                requestAnimationFrame
 			}
         }
     }
