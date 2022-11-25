@@ -139,7 +139,7 @@ export default {
                     },6000)
                 }
 
-				window.setTimeout(()=>{sound.pause()},7000)
+				window.setTimeout(()=>{sound.pause()},8000)
                 requestAnimationFrame
 			}
         }
