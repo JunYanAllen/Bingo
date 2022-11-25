@@ -11,7 +11,7 @@
             </div>
 
             <div class="tip">
-                將抽六次，總計35個數字，只要連成三條線，先在螢幕上打字並完成視訊完成驗證
+                總計抽出35個數字，優先連成三條線於聊天室打上”我中獎了！“，並開啟視訊完成驗證
             </div>
 
             <div class="circle-bg" :class="{fadeInUp:isfadeInUp}">
@@ -27,11 +27,14 @@
             </div>
 
 			<div class="groupAll groupAllshow" v-show="groupAll">
-				<div class="groupAllTxt" v-for="numbers in lotteryNumners" :key="numbers">
+				<!-- <div class="groupAllTxt" v-for="numbers in lotteryNumners" :key="numbers">
 					<ul >
 						<li v-for="n in numbers" :key="n">{{ n }}</li>
 					</ul>
-				</div>
+				</div> -->
+                <div class="groupAllTxt">
+                    <span v-for="n in totalNumner" :key="n" class="list-item">{{ n }}</span>
+                </div>
 			</div>
 
             <div class="groupNum groupNumshow" v-show="groupNum">
@@ -54,11 +57,12 @@ export default {
     },
     data() {
         return {
+            count: 0,
             isfadeInUp: false,
             min: 1,
             max: 75,
-			lotteryNumners: [],
 			totalNumner: [],
+            fistNumner: [],
             result : 0,
 			music: require('../assets/img/common/lucky.mp3'),
 			groupAll: false,
@@ -91,41 +95,47 @@ export default {
                     for(var i=0; i<13; i++){
                         randNum = Math.round(this.min + Math.random() * (this.max- this.min));
                         
-                        for(var j=0; j<=this.totalNumner.length; j){
-                            while(this.totalNumner.includes(randNum)) {
+                        for(var j=0; j<=this.fistNumner.length; j){
+                            while(this.fistNumner.includes(randNum)) {
                                 randNum = Math.round(this.min + Math.random() * (this.max- this.min));
                             }
                             j++;
                         }
-                        this.totalNumner.push(randNum)
+                        this.fistNumner.push(randNum)
+
                     }
                 }else if(this.totalNumner.length < 35 && this.totalNumner.length >= 13){
+                    this.count += 1
                     randNum = Math.round(this.min + Math.random() * (this.max- this.min));
 
                     while(this.totalNumner.includes(randNum)) {   
                         randNum = Math.round(this.min + Math.random() * (this.max- this.min));
                     }
-                    this.totalNumner.push(randNum)
                 }
-				if(this.totalNumner.length == 13){
+
+				if(this.count == 0){
                     window.setTimeout(()=>{
                     this.groupAll = true
                     },6000)
+                    window.setTimeout(()=>{
+                    this.totalNumner = this.fistNumner.sort(compareNumbers)
+                    },9000)
                 }
 
 				if(this.totalNumner.length < 35){
 					window.setTimeout(()=>{
 					this.isrotateIn1 = false;
 					this.isrotateIn2 = false;
-                    this.lotteryNumners = getNewArray(this.totalNumner.sort(compareNumbers),5)
 					},6000)
                     
 				}
 
-                if(this.totalNumner.length > 13){
+                if(this.count >= 1){
                     window.setTimeout(()=>{
                         this.groupNum = true
                         this.result = randNum
+                        this.totalNumner.splice(this.totalNumner.length + 1,0,randNum);
+                        this.totalNumner = this.totalNumner.sort(compareNumbers)
                     },6000)
                 }
 
@@ -134,24 +144,11 @@ export default {
 			}
         }
     }
+}
 
-}
-function getNewArray(arr, size){
-	const arrNum = Math.ceil(arr.length/size, 10); // Math.ceil()向上取整的方法，用来计算拆分后数组的长度
-	let index = 0; // 定义初始索引
-	let resIndex = 0; // 用来保存每次拆分的长度
-	const result = [];
-	while(index< arrNum){
-		result[index]= arr.slice(resIndex,size+resIndex);
-		resIndex += size;
-		index++;
-	}
-	return result;
-}
 function compareNumbers(a, b) {
   return a - b;
 }
-
 </script>
 
 <style scoped>
@@ -370,18 +367,19 @@ img{
 	flex-wrap: wrap;
 }
 .groupAllTxt{
-	width: 150px;
-	height: 160px;
-	top: 115px;
-	left: 1px;
+	width: 100%;
 	color: #ffcd00;
 	text-align: center;
 	line-height: 28px;
-	font-size: 20px;
+	font-size: 30px;
 	letter-spacing: 2px;
 	display: flex;
-	justify-content: center;
+    flex-wrap:wrap;
 	align-items: center;
+    text-indent: 50px;
+    justify-content: space-between;
+    flex-direction: row;
+    padding-right: 25px;
 }
 
 @keyframes groupAllshow{
@@ -394,7 +392,7 @@ img{
 	60%  {height: 30%;}
 	70%  {height: 40%;}
 	80%  {height: 50%;}
-	90%  {height: 55%;}
+	90%  {height: 60%;}
 	100%  {height: 70%;}
 }
 .groupAllshow{
@@ -419,7 +417,6 @@ img{
 	width: 100%;
 	height: 100%;
 	color: #ffcd00;
-	text-align: center;
 	line-height: 28px;
 	font-size: 100px;
 	letter-spacing: 2px;
@@ -427,5 +424,4 @@ img{
 	justify-content: center;
 	align-items: center;
 }
-
 </style>
